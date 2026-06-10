@@ -1,2 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /auth
+Disallow: /_authenticated
+
+Sitemap: https://vocational-vision-portal.lovable.app/sitemap.xml
