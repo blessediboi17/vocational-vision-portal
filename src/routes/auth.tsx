@@ -30,7 +30,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/_authenticated/admin" as any });
+      if (data.session) navigate({ to: "/admin" as any });
     });
   }, [navigate]);
 
@@ -52,12 +52,12 @@ function AuthPage() {
       setLoading(false);
       if (error) return toast.error(error.message);
       toast.success("Account created! You're signed in.");
-      navigate({ to: "/_authenticated/admin" as any });
+      navigate({ to: "/admin" as any });
     } else {
       const { error } = await supabase.auth.signInWithPassword(parsed.data);
       setLoading(false);
       if (error) return toast.error(error.message);
-      navigate({ to: "/_authenticated/admin" as any });
+      navigate({ to: "/admin" as any });
     }
   }
 
