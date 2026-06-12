@@ -259,17 +259,9 @@ function Gallery() {
           <div className="text-xs uppercase tracking-[0.2em] text-leaf mb-3">Our work</div>
           <h2 className="font-display text-4xl md:text-5xl font-semibold leading-tight">From our classes & events.</h2>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {images.map((img: any) => (
-            <figure key={img.id} className="group relative aspect-square rounded-2xl overflow-hidden border border-border bg-card">
-              <img src={img.image_url} alt={img.title || img.caption || "Gallery image"} loading="lazy" className="size-full object-cover transition duration-700 group-hover:scale-105" />
-              {(img.title || img.caption) && (
-                <figcaption className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/70 to-transparent text-white">
-                  {img.title && <div className="font-display font-semibold text-sm">{img.title}</div>}
-                  {img.caption && <div className="text-xs text-white/80">{img.caption}</div>}
-                </figcaption>
-              )}
-            </figure>
+            <GalleryCard key={img.id} image={img} />
           ))}
         </div>
       </div>
