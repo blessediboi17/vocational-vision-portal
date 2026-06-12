@@ -23,14 +23,17 @@ function AdminDashboard() {
   const [tab, setTab] = useState<Tab>("gallery");
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [email, setEmail] = useState<string>("");
+  const [isBlocked, setIsBlocked] = useState(false);
 
   useEffect(() => {
     (async () => {
       const { data: u } = await supabase.auth.getUser();
       setEmail(u.user?.email ?? "");
       if (!u.user) return;
-      const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", u.user.id);
-      setIsAdmin(!!roles?.some((r: any) => r.role === "admin"));
+      const { data: roles } = await supabase.from("user_roles").select("role, is_blocked" as any).eq("user_id", u.user.id);
+      const adminRow = (roles as any)?.find((r: any) => r.role === "admin");
+      setIsAdmin(!!adminRow && !adminRow.is_blocked);
+      setIsBlocked(!!adminRow?.is_blocked);
     })();
   }, []);
 
@@ -46,9 +49,13 @@ function AdminDashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="max-w-md text-center">
-          <ShieldAlert className="size-12 text-destructive mx-auto mb-4" />
-          <h1 className="font-display text-2xl font-semibold mb-2">Not authorized</h1>
-          <p className="text-muted-foreground mb-6">Your account ({email}) doesn't have admin access.</p>
+          {isBlocked ? <Lock className="size-12 text-destructive mx-auto mb-4" /> : <ShieldAlert className="size-12 text-destructive mx-auto mb-4" />}
+          <h1 className="font-display text-2xl font-semibold mb-2">{isBlocked ? "Admin access locked" : "Not authorized"}</h1>
+          <p className="text-muted-foreground mb-6">
+            {isBlocked
+              ? `Your admin access (${email}) has been locked by another admin. Ask them to unlock it.`
+              : `Your account (${email}) doesn't have admin access.`}
+          </p>
           <Button onClick={signOut} variant="outline"><LogOut className="size-4" /> Sign out</Button>
         </div>
       </div>
@@ -68,13 +75,16 @@ function AdminDashboard() {
           </div>
           <Button variant="outline" size="sm" onClick={signOut}><LogOut className="size-4" /> Sign out</Button>
         </div>
-        <nav className="max-w-6xl mx-auto px-5 flex gap-1 border-t border-border">
+        <nav className="max-w-6xl mx-auto px-5 flex gap-1 border-t border-border overflow-x-auto">
           {([
             { k: "gallery", l: "Gallery", I: ImageIcon },
+            { k: "posts", l: "Posts", I: FileText },
+            { k: "recipes", l: "Recipes", I: ChefHat },
             { k: "submissions", l: "Submissions", I: MessageSquare },
+            { k: "admins", l: "Admins", I: ShieldCheck },
             { k: "settings", l: "Settings", I: Settings },
           ] as { k: Tab; l: string; I: any }[]).map(({ k, l, I }) => (
-            <button key={k} onClick={() => setTab(k)} className={`px-4 py-3 text-sm font-medium border-b-2 transition flex items-center gap-2 ${tab === k ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}>
+            <button key={k} onClick={() => setTab(k)} className={`px-4 py-3 text-sm font-medium border-b-2 transition flex items-center gap-2 whitespace-nowrap ${tab === k ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}>
               <I className="size-4" /> {l}
             </button>
           ))}
@@ -83,7 +93,10 @@ function AdminDashboard() {
 
       <main className="max-w-6xl mx-auto px-5 py-8">
         {tab === "gallery" && <GalleryManager />}
+        {tab === "posts" && <PostsManager kind="post" />}
+        {tab === "recipes" && <PostsManager kind="recipe" />}
         {tab === "submissions" && <SubmissionsManager />}
+        {tab === "admins" && <AdminsManager />}
         {tab === "settings" && <SettingsManager />}
       </main>
     </div>
