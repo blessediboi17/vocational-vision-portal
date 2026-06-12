@@ -80,6 +80,8 @@ function Header() {
           {links.map((l) => (
             <a key={l.href} href={l.href} className="hover:text-primary transition">{l.label}</a>
           ))}
+          <Link to="/blog" className="hover:text-primary transition">Blog</Link>
+          <Link to="/recipes" className="hover:text-primary transition">Recipes</Link>
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle className="hidden sm:inline-flex" />
@@ -102,6 +104,8 @@ function Header() {
             {links.map((l) => (
               <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="py-2 text-sm font-medium">{l.label}</a>
             ))}
+            <Link to="/blog" onClick={() => setOpen(false)} className="py-2 text-sm font-medium">Blog</Link>
+            <Link to="/recipes" onClick={() => setOpen(false)} className="py-2 text-sm font-medium">Recipes</Link>
             <div className="flex items-center gap-3 pt-2">
               <ThemeToggle />
               <Link to="/auth" className="text-sm font-medium">Admin</Link>
