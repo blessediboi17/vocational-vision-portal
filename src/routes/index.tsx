@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { ParallaxBackground } from "@/components/ParallaxBackground";
 import { SocialShare } from "@/components/SocialShare";
 import { ContactForm } from "@/components/ContactForm";
+import { GalleryCard } from "@/components/GalleryCard";
 import { supabase } from "@/integrations/supabase/client";
 import heroImg from "@/assets/hero-catering.jpg";
 import equipmentImg from "@/assets/equipment.jpg";
