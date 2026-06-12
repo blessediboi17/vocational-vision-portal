@@ -176,6 +176,35 @@ function GalleryManager() {
   );
 }
 
+function AdminGalleryItem({ img, onRemove, onToggle }: { img: any; onRemove: () => void; onToggle: () => void }) {
+  const [url, setUrl] = useState<string>("");
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const m = img.image_url.match(/\/gallery\/(.+)$/);
+      if (!m) { setUrl(img.image_url); return; }
+      const { data } = await supabase.storage.from("gallery").createSignedUrl(decodeURIComponent(m[1]), 3600);
+      if (!cancelled) setUrl(data?.signedUrl || img.image_url);
+    })();
+    return () => { cancelled = true; };
+  }, [img.image_url]);
+  return (
+    <div className="rounded-2xl overflow-hidden border border-border bg-card">
+      <div className="relative aspect-square bg-muted">
+        {url ? <img src={url} alt={img.title || ""} className="size-full object-cover" /> : <div className="size-full flex items-center justify-center"><Loader2 className="size-5 animate-spin text-muted-foreground" /></div>}
+        {!img.is_active && <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-xs uppercase tracking-widest">Hidden</div>}
+      </div>
+      <div className="p-3 flex items-center justify-between gap-2">
+        <div className="text-xs truncate">{img.title || "Untitled"}</div>
+        <div className="flex gap-1">
+          <Button size="sm" variant="outline" onClick={onToggle}>{img.is_active ? "Hide" : "Show"}</Button>
+          <Button size="sm" variant="ghost" onClick={onRemove}><Trash2 className="size-4 text-destructive" /></Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SubmissionsManager() {
   const qc = useQueryClient();
   const { data: subs = [], isLoading } = useQuery({
