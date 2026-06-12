@@ -7,14 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { ArrowLeft, LogOut, Upload, Trash2, Image as ImageIcon, MessageSquare, Settings, Loader2, ShieldAlert, Mail, Phone, ExternalLink } from "lucide-react";
+import { ArrowLeft, LogOut, Upload, Trash2, Image as ImageIcon, MessageSquare, Settings, Loader2, ShieldAlert, Mail, Phone, ExternalLink, FileText, ChefHat, ShieldCheck, Lock } from "lucide-react";
+import { PostsManager } from "@/components/admin/PostsManager";
+import { AdminsManager } from "@/components/admin/AdminsManager";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin · Redeem" }, { name: "robots", content: "noindex" }] }),
   component: AdminDashboard,
 });
 
-type Tab = "gallery" | "submissions" | "settings";
+type Tab = "gallery" | "posts" | "recipes" | "submissions" | "admins" | "settings";
 
 function AdminDashboard() {
   const navigate = useNavigate();
