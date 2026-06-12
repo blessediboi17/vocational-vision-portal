@@ -55,7 +55,7 @@ function BlogPost() {
         )}
         <div className="flex items-center gap-3 mt-10 pt-6 border-t border-border">
           <LikeButton postId={post.id} />
-          <SocialShare title={post.title} description={post.excerpt || ""} />
+          <SocialShare title={post.title} />
         </div>
       </div>
     </article>

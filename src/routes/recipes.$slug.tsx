@@ -60,7 +60,7 @@ function RecipeView() {
         </div>
         <div className="flex items-center gap-3 mt-10 pt-6 border-t border-border">
           <LikeButton postId={r.id} />
-          <SocialShare title={r.title} description={r.excerpt || ""} />
+          <SocialShare title={r.title} />
         </div>
       </div>
     </article>
