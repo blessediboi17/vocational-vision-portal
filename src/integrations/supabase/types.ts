@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_settings: {
+        Row: {
+          id: number
+          max_admins: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          id?: number
+          max_admins?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          id?: number
+          max_admins?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string
@@ -80,6 +101,95 @@ export type Database = {
           sort_order?: number
           title?: string | null
           uploaded_by?: string | null
+        }
+        Relationships: []
+      }
+      post_likes: {
+        Row: {
+          created_at: string
+          id: string
+          liker_fingerprint: string
+          post_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          liker_fingerprint: string
+          post_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          liker_fingerprint?: string
+          post_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          author_id: string | null
+          body_markdown: string | null
+          cover_image_url: string | null
+          created_at: string
+          difficulty: string | null
+          excerpt: string | null
+          id: string
+          ingredients: string | null
+          instructions: string | null
+          kind: string
+          prep_time_minutes: number | null
+          published: boolean
+          published_at: string | null
+          slug: string
+          title: string
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          author_id?: string | null
+          body_markdown?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          difficulty?: string | null
+          excerpt?: string | null
+          id?: string
+          ingredients?: string | null
+          instructions?: string | null
+          kind?: string
+          prep_time_minutes?: number | null
+          published?: boolean
+          published_at?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          author_id?: string | null
+          body_markdown?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          difficulty?: string | null
+          excerpt?: string | null
+          id?: string
+          ingredients?: string | null
+          instructions?: string | null
+          kind?: string
+          prep_time_minutes?: number | null
+          published?: boolean
+          published_at?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+          view_count?: number
         }
         Relationships: []
       }
@@ -160,17 +270,26 @@ export type Database = {
       }
       user_roles: {
         Row: {
+          blocked_at: string | null
+          blocked_by: string | null
           id: string
+          is_blocked: boolean
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Insert: {
+          blocked_at?: string | null
+          blocked_by?: string | null
           id?: string
+          is_blocked?: boolean
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
+          blocked_at?: string | null
+          blocked_by?: string | null
           id?: string
+          is_blocked?: boolean
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
@@ -181,6 +300,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_list_admins: {
+        Args: never
+        Returns: {
+          blocked_at: string
+          blocked_by: string
+          email: string
+          full_name: string
+          is_blocked: boolean
+          user_id: string
+        }[]
+      }
+      admin_set_blocked: {
+        Args: { _blocked: boolean; _target_user_id: string }
+        Returns: undefined
+      }
+      admin_set_max: { Args: { _n: number }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
