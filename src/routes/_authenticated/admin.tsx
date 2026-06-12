@@ -163,19 +163,12 @@ function GalleryManager() {
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {images.map((img: any) => (
-            <div key={img.id} className="rounded-2xl overflow-hidden border border-border bg-card">
-              <div className="relative aspect-square">
-                <img src={img.image_url} alt={img.title || ""} className="size-full object-cover" />
-                {!img.is_active && <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-xs uppercase tracking-widest">Hidden</div>}
-              </div>
-              <div className="p-3 flex items-center justify-between gap-2">
-                <div className="text-xs truncate">{img.title || "Untitled"}</div>
-                <div className="flex gap-1">
-                  <Button size="sm" variant="outline" onClick={() => toggleActive(img.id, img.is_active)}>{img.is_active ? "Hide" : "Show"}</Button>
-                  <Button size="sm" variant="ghost" onClick={() => remove(img.id, img.image_url)}><Trash2 className="size-4 text-destructive" /></Button>
-                </div>
-              </div>
-            </div>
+            <AdminGalleryItem
+              key={img.id}
+              img={img}
+              onRemove={() => remove(img.id, img.image_url)}
+              onToggle={() => toggleActive(img.id, img.is_active)}
+            />
           ))}
         </div>
       )}
