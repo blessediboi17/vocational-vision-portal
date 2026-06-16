@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecipesRouteImport } from './routes/recipes'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -18,6 +19,11 @@ import { Route as RecipesSlugRouteImport } from './routes/recipes.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RecipesRoute = RecipesRouteImport.update({
   id: '/recipes',
   path: '/recipes',
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/recipes': typeof RecipesRouteWithChildren
+  '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/recipes/$slug': typeof RecipesSlugRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/recipes': typeof RecipesRouteWithChildren
+  '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/recipes/$slug': typeof RecipesSlugRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
   '/recipes': typeof RecipesRouteWithChildren
+  '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/recipes/$slug': typeof RecipesSlugRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/recipes'
+    | '/reset-password'
     | '/admin'
     | '/blog/$slug'
     | '/recipes/$slug'
@@ -103,6 +113,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/recipes'
+    | '/reset-password'
     | '/admin'
     | '/blog/$slug'
     | '/recipes/$slug'
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/recipes'
+    | '/reset-password'
     | '/_authenticated/admin'
     | '/blog/$slug'
     | '/recipes/$slug'
@@ -124,10 +136,18 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
   RecipesRoute: typeof RecipesRouteWithChildren
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/recipes': {
       id: '/recipes'
       path: '/recipes'
@@ -225,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
   RecipesRoute: RecipesRouteWithChildren,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
